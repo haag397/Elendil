@@ -1,0 +1,35 @@
+version: '3.5'
+secrets:
+  database_password:
+    file: ./configs/secrets/database_password.txt
+services:
+  database:
+    image: postgres:16.2
+    restart: always
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD_FILE=/run/secrets/database_password
+    secrets:
+      - database_password
+    ports:
+      - "5432:5432"
+    # entrypoint: ["sh", "-c", "sleep 4 && docker-entrypoint.sh postgres"]
+
+  elendil:
+    build: .
+    restart: always
+    depends_on:
+      - database
+          # condition: service_healthy
+    #   - redis:
+    #       condition: service_healthy
+
+    command: python app/manage.py runserver 0.0.0.0:8001
+    volumes:
+      - ./:/app
+    secrets:
+      - database_password
+    ports:
+      - "8001:8001"
