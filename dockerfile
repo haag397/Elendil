@@ -1,8 +1,8 @@
 FROM python:3.11.8-slim-bullseye
 
-ENV PIP_DEFAULT_TIMEOUT=100 \
-    #* Allow statements and log messages to immediately appear
-    PYTHONUNBUFFERED=1
+# ENV PIP_DEFAULT_TIMEOUT=100 \
+#     #* Allow statements and log messages to immediately appear
+#     PYTHONUNBUFFERED=1
 
 # RUN apt-get update && apt-get upgrade -y
 
