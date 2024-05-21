@@ -1,31 +1,38 @@
 """
 settings for development
 """
+import os
 from .base import *
 
 ALLOWED_HOSTS = ["0.0.0.0"]
 
-import os
-
 def read_secret(secret_name):
+    """_summary_
+    """
     try:
-        with open(f"/run/secrets/database_password") as f:
-            return f.read().strip()
+        with open(f'/run/secrets/{secret_name}', 'r') as file:
+            return file.read().strip()
     except IOError:
         return None
 
-print("==================================")
-print(read_secret("database_password"))
-print("********************************************")
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'postgres',
+#         'USER': 'root',
+#        "PASSWORD": read_secret("database_password"),
+#         'HOST': 'db',
+#         'PORT': '5432',
+#     }
+# }
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'root',
-       "PASSWORD": read_secret("database_password"),
-        # 'PASSWORD': '2izqnc9vfy2aw2iqbjk903s75',
-        'HOST': 'db',
+        'NAME': os.environ.get("DATABASE_NAME"),
+        'USER': os.environ.get("DATABASE_USER"),
+        'PASSWORD': read_secret("database_password"),
+        'HOST': os.environ.get("DATABASE_HOST"),
         'PORT': '5432',
     }
 }

@@ -2,7 +2,7 @@ version: '3.8'
 
 secrets:
   database_password:
-    file : database_password.txt
+    file : ./configs/secrets/database_password.txt
 services:
   elendil:
     build: .
@@ -29,11 +29,15 @@ services:
       POSTGRES_PASSWORD_FILE: /run/secrets/database_password
       # POSTGRES_HOST_AUTH_METHOD: md5
     ports:
-      - "5433:5432"
+      - "5432:5432"
+    volumes:
+      - dev-db:/var/lib/postgresql/data
     secrets:
       - database_password
-    # healthcheck:
-    #   test: ["CMD-SHELL", "pg_isready"]
-    #   interval: 1s
-    #   timeout: 5s
-    #   retries: 10
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+volumes:
+  dev-db:

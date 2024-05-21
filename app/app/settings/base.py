@@ -9,16 +9,13 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECRET_KEY = 'django-insecure-no$05%z%lqsn)9v^j!k9e1zda)19k5@plf$vvtrb)!_^&nxh-)'
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
-# Application definition
-
+# * Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -29,7 +26,7 @@ INSTALLED_APPS = [
     # * External Packages
     "rest_framework",
     # * Interal Apps
-    # "app.core",
+    "core",
 ]
 
 MIDDLEWARE = [
