@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # * External Packages
     "rest_framework",
+    "rest_framework_simplejwt",
     # * Interal Apps
     "core",
     "authentication",
@@ -91,15 +92,14 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# * default authentication class means that all API requests will use JWT
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     )
 }
-
+# * set epiration time for ACCESS_TOKEN and REFRESH_TOKEN
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(hours=1),
 }
-
-# AUTH_USER_MODEL = "authentication.models.UserData"

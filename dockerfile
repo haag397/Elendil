@@ -1,4 +1,4 @@
-FROM python:3.11.8-slim-bullseye
+FROM python:3.11.9-slim-bullseye
 
 ENV PIP_DEFAULT_TIMEOUT=100 \
     #* Allow statements and log messages to immediately appear
@@ -16,6 +16,5 @@ WORKDIR /app
 
 EXPOSE 8001
 
-# ENTRYPOINT ["python", "lief/manage.py"]
 #* Start the Django server
 CMD ["runserver", "0.0.0.0:8001"]

@@ -4,7 +4,7 @@ settings for development
 import os
 from .base import *
 
-ALLOWED_HOSTS = ["0.0.0.0"]
+ALLOWED_HOSTS = ["localhost"]
 
 
 def read_secret(secret_name):
