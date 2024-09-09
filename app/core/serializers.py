@@ -1,4 +1,4 @@
-"""_summary_
+"""serializer for admins and users
 """
 from rest_framework import serializers
 
@@ -11,16 +11,18 @@ class AdminDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = AdminData
         fields = [
+            "id",
             "email",
-            "firstname",
-            "lastname",
-            "is_active",
             "username",
             "password",
+            "first_name",
+            "last_name",
+            "date_joined",  # Add this field if you want to display it
+            "last_edit",
         ]
-        extra_kwargs = {
-            "password": {"write_only": True},
-        }
+        read_only_fields = ["id", "date_joined", "last_edit"]
+        extra_kwargs = {"password": {"write_only": True}}
+        extra_kwargs = {"password": {"write_only": True}}
 
 
 class UserDataSerializer(serializers.ModelSerializer):
@@ -28,13 +30,6 @@ class UserDataSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserData
-        fields = [
-            "email",
-            "firstname",
-            "lastname",
-            "is_active",
-            "username",
-        ]
-        extra_kwargs = {
-            "password": {"write_only": True},
-        }
+        fields = ["id", "username", "password", "email", "first_name", "last_name"]
+        read_only_fields = ["id", "date_joined", "last_edit"]
+        extra_kwargs = {"password": {"write_only": True}}

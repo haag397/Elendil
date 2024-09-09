@@ -2,20 +2,16 @@
 URL configuration for app project.
 """
 from django.contrib import admin
-from django.urls import path
-from authentication.views import User
-from core.views import AdminDataCreateView
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-    TokenVerifyView,
-)
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from user_create import views
+from authentication.views import AdminLoginView
+
+router = DefaultRouter()
+router.register(r"admins", views.AdminDataViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("users/", User.as_view(), name="user-list-create"),
-    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-    path("api/token/verify/", TokenVerifyView.as_view(), name="token_verify"),
-    path("createadmin/", AdminDataCreateView.as_view(), name="admin-data-create"),
+    path("admin/login/", AdminLoginView.as_view(), name="admin_login"),
+    path("api/", include(router.urls)),
 ]

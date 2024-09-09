@@ -1,35 +1,39 @@
-"""_summary_
-    """
-
-from django.shortcuts import render
-from rest_framework import mixins
-from rest_framework import generics
-from core.models import UserData
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
+"""API for authentication
+"""
+from django.contrib.auth import authenticate
+from rest_framework import status
+from rest_framework import generics, permissions
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.views import APIView
+from core.models import AdminData
+from core.serializers import AdminDataSerializer
 
-# from .serializers.serializers import UserDataSerializer
-from core.serializers import UserDataSerializer
 
+class AdminLoginView(APIView):
+    """handle login with JWT"""
 
-# class User(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
 
-#     queryset = UserData.objects.all()
-#     serializer_class = UserDataSerializer
+    def post(self, request, *args, **kwargs):
+        username = request.data.get("username")
+        password = request.data.get("password")
 
-#     def get(self, request, *args, **kwargs):
-#         data = request.data
-#         print(data)
-#         return self.list(request, *args, **kwargs)
+        # * check username and password
+        admin = authenticate(request, username=username, password=password)
 
-#     def post(self, request, *args, **kwargs):
-#         data = request.data
-#         print(data)
-#         return self.create(request, *args, **kwargs)
-class User(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self):
-        return Response({"message": "Hello, world!"})
+        if admin is not None:
+            # * Generate JWT tokens
+            refresh = RefreshToken.for_user(admin)
+            return Response(
+                {
+                    "refresh_token": str(refresh),
+                    "access_token": str(refresh.access_token),
+                },
+                status=status.HTTP_200_OK,
+            )
+        else:
+            return Response(
+                {"detail": "Invalid username or password"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
